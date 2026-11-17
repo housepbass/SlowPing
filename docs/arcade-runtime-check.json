@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-17T19:33:50.507Z",
+  "browser": "157.0.8103.79",
+  "launcherCommand": "python3 start.py --port 8002 --no-browser",
+  "defaultLauncher": "python3 start.py",
+  "defaultUrl": "http://127.0.0.1:8001",
+  "checkedUrl": "http://127.0.0.1:8002",
+  "httpStatus": 200,
+  "baselineRtt": 14,
+  "editedRtt": 59,
+  "progressionEnabled": true,
+  "externalRequests": [],
+  "errors": [],
+  "cardImage": "docs/screenshots/arcade-card.png",
+  "cardWidth": 1280,
+  "cardHeight": 720
+}
