@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-17T19:15:56.777Z",
+  "browser": "157.0.8103.79",
+  "checks": [
+    {
+      "name": "Direct lab entry with working static44 baseline",
+      "passed": true
+    },
+    {
+      "name": "Real drag-and-drop builds a pending path without changing ping",
+      "passed": true
+    },
+    {
+      "name": "Applied enabled tunnel134 vs static44, independent reply, completion",
+      "passed": true
+    },
+    {
+      "name": "Disable restores static forwarding without erasing best",
+      "passed": true
+    },
+    {
+      "name": "Drag reordering creates invalid draft; rejected Apply preserves installed tunnel",
+      "passed": true
+    },
+    {
+      "name": "Reset restores configuration and preserves earned results",
+      "passed": true
+    },
+    {
+      "name": "Keyboard add/move/remove/apply/enable/ping achieves target",
+      "passed": true
+    },
+    {
+      "name": "Help and solution record assistance and require a new ping",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion preserves result and disables animation",
+      "passed": true
+    },
+    {
+      "name": "No page overflow375/760/1024/1440",
+      "passed": true
+    },
+    {
+      "name": "Campaign remains usable; return to lab preserves session",
+      "passed": true
+    },
+    {
+      "name": "Restart cancellation preserves tunnel state",
+      "passed": true
+    },
+    {
+      "name": "Confirmed restart clears campaign and tunnel records",
+      "passed": true
+    },
+    {
+      "name": "Reload begins a fresh session",
+      "passed": true
+    },
+    {
+      "name": "Malformed lab cannot grade and does not break static campaign",
+      "passed": true
+    },
+    {
+      "name": "No browser runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

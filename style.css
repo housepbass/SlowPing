@@ -1179,3 +1179,231 @@ dialog p {
 .path-reply {
   fill: none;
 }
+/* Explicit-path lab */
+.lab-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  gap: 12px;
+}
+.lab-nav .text-button {
+  padding-left: 0;
+}
+.lab-brief {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 20px;
+  border: 1px solid #394b3b;
+  background: #1c291f;
+  padding: 18px 22px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #c5d1c0;
+}
+.lab-brief > .pill {
+  align-self: start;
+}
+.lab-brief p {
+  margin: 0;
+}
+.lab-brief details {
+  grid-column: 2;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.lab-brief details p {
+  margin: 12px 0;
+}
+.tunnel-workspace {
+  grid-template-columns: minmax(0, 1fr) 345px;
+}
+.router-palette {
+  display: flex;
+  gap: 10px;
+  margin: 9px 0 22px;
+}
+.palette-router {
+  flex: 1;
+  background: #29382b;
+  border-color: #5d7548;
+  color: var(--lime);
+  font-family: monospace;
+  font-size: 15px;
+  padding: 10px;
+  cursor: grab;
+}
+.palette-router:disabled {
+  cursor: not-allowed;
+}
+.add-hop-row {
+  display: flex;
+  gap: 8px;
+}
+.add-hop-row select {
+  flex: 1;
+  min-width: 0;
+}
+.path-builder {
+  padding: 0;
+  margin: 12px 0;
+  list-style: none;
+}
+.hop-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #4d6350;
+  border-radius: 6px;
+  background: #23312b;
+  padding: 11px;
+  min-height: 56px;
+}
+.hop-card[draggable="true"] {
+  cursor: grab;
+}
+.hop-card.fixed-hop {
+  background: #1a2425;
+  border-color: var(--line);
+}
+.hop-index {
+  font: 10px monospace;
+  color: var(--muted);
+}
+.hop-kind {
+  font: 8px monospace;
+  color: var(--muted);
+  margin-left: auto;
+  letter-spacing: 0.6px;
+}
+.hop-buttons {
+  display: flex;
+  gap: 3px;
+}
+.hop-buttons button {
+  padding: 5px 6px;
+  min-width: 27px;
+  min-height: 30px;
+  font-size: 13px;
+}
+.hop-dropzone {
+  padding: 7px;
+  text-align: center;
+  font: 8px monospace;
+  letter-spacing: 1px;
+  color: #91a486;
+  min-height: 30px;
+  border: 1px dashed transparent;
+  border-radius: 4px;
+}
+.hop-dropzone.drag-over {
+  border-color: var(--lime);
+  background: #33482b;
+  color: var(--lime);
+}
+.tunnel-toggle {
+  margin-top: 10px;
+  border-color: #5d7249;
+}
+.tunnel-toggle.enabled {
+  background: #31442c;
+  color: var(--lime);
+  border-color: var(--lime);
+}
+.tunnel-installed {
+  padding: 20px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.tunnel-installed strong {
+  font: 15px monospace;
+  overflow-wrap: anywhere;
+}
+.tunnel-installed > span:last-child {
+  font-size: 11px;
+  color: var(--muted);
+}
+.tunnel-workspace .ping-toolbar #tunnel-ping {
+  margin-left: auto;
+}
+.comparison-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  font: 10px monospace;
+  color: var(--muted);
+}
+.comparison-strip b {
+  font-weight: 500;
+  color: var(--lime);
+}
+#tunnel-delta {
+  color: var(--lime);
+}
+#tunnel-error {
+  padding: 12px;
+  background: #4b2921;
+  border-radius: 5px;
+}
+.tunnel-inspector .inspector-content {
+  padding: 18px;
+}
+.lab-brief a {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) {
+  .tunnel-workspace {
+    grid-template-columns: minmax(0, 1fr) 310px;
+  }
+}
+@media (max-width: 760px) {
+  .tunnel-workspace {
+    grid-template-columns: 1fr;
+  }
+  .lab-brief {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    font-size: 12px;
+  }
+  .lab-brief details {
+    grid-column: 1;
+  }
+  .lab-nav .text-button {
+    font-size: 10px;
+  }
+  .lab-nav .pill {
+    font-size: 8px;
+  }
+  .comparison-strip {
+    font-size: 9px;
+    align-items: flex-start;
+  }
+  .header-right {
+    gap: 0;
+  }
+  .header-right .text-button {
+    margin-left: 0;
+    padding: 9px 5px;
+    font-size: 8px;
+  }
+  .tunnel-workspace .network-canvas svg {
+    min-height: 180px;
+  }
+  .tunnel-workspace .ping-toolbar {
+    gap: 12px;
+  }
+  .bottom-actions .help-actions {
+    flex-wrap: wrap;
+  }
+  .tunnel-installed strong {
+    font-size: 13px;
+  }
+}

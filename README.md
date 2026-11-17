@@ -4,7 +4,7 @@
 
 A playable browser routing puzzle. Every challenge starts with a working network. Use the graphical router inspector to take a longer route, then send a ping and inspect its request and reply. Only a successful round trip counts.
 
-**Status:** MVP implemented and locally verified; owner confirmation pending. Three levels, static IPv4 routing. Future protocols may begin immediately after owner confirmation.
+**Status:** Static-routing MVP accepted for expansion; simplified MPLS-TE explicit-path lab implemented and locally verified. Three campaign levels plus a directly accessible bonus lab. Owner review of the new lab is pending.
 
 ![Slow Ping network editor](docs/screenshots/level-1.png)
 
@@ -44,6 +44,16 @@ Hints and worked solutions are available without penalty. Help is recorded separ
 
 All core actions work with keyboard. Use Tab/Shift+Tab, Enter/Space on buttons, and native select navigation or type-ahead. **View network as text & model assumptions** provides the full text alternative. The page respects reduced motion; animation never changes scoring.
 
+## MPLS-TE explicit-path lab
+
+Choose **MPLS-TE lab** in the header, opening screen, or campaign summary. The same five-router network starts with static routing and a 44 ms ping. Build an ordered R1→R5 tunnel by dragging R2/R3/R4 into drop zones, or use the Add selector and per-hop move/remove buttons. Apply the path, enable the tunnel, then Run ping.
+
+The maximum path R1→R2→R3→R4→R5 takes 112 ms for the request; the reply keeps its 22 ms static path, yielding **134ms RTT**, +90ms vs static. The 6 ms cross-link shortens the journey. Disable the tunnel to compare 44 ms again. Draft edits never affect the applied path; invalid strict-hop sequences explain the broken link and preserve the installed tunnel. Best successful tunnel RTT and assistance survive resets/mode switches until reload or confirmed session restart.
+
+This is a **simplified pre-established unidirectional LSP model** for explicit steering. It does not implement RSVP-TE signaling, reservations, labels or push/swap/pop, control-plane convergence, or MPLS TTL propagation. It uses the shared IPv4 TTL 8 teaching rule. Unique routers are a challenge constraint. MPLS itself receives no latency bonus. [RFC3209§4.3](https://www.rfc-editor.org/rfc/rfc3209.html#section-4.3) supports the strict explicit-routing concept; the omitted protocol mechanisms are stated in the lab briefing.
+
+![Explicit path tunnel lab](docs/screenshots/tunnel-desktop.png)
+
 ## Model and sources
 
 This is a deterministic teaching model: logical routers, fixed endpoint gateways and direct-delivery routes, static IPv4 routes with longest-prefix selection, and fixed symmetric one-way link delays. RTT sums all links traversed by the request and reply. Router processing adds zero delay. There is no simulated loss, queueing, congestion, ARP, interface subnet negotiation, dynamic routing, or Layer 2 behavior.
@@ -73,9 +83,10 @@ npm ci
 python3 start.py --no-browser
 # In a second terminal:
 node tools/browser-check.mjs
+node tools/tunnel-browser-check.mjs
 ```
 
-Set CHROME_PATH for another Chrome installation, BASE_URL for a different local server. Browser script defaults to macOS Chrome. See [verification evidence](docs/verification.md), [browser results](docs/browser-results.json), and [domain results](docs/domain-results.tap). These checks do not claim full accessibility certification or broad browser compatibility.
+Set CHROME_PATH for another Chrome installation, BASE_URL for a different local server. Browser script defaults to macOS Chrome. See [verification evidence](docs/verification.md), [browser results](docs/browser-results.json), and [domain results](docs/domain-results.tap). Current results: 23 domain/state/content checks, 18 static campaign browser checks, 16 tunnel browser checks; all pass. [Tunnel verification](docs/tunnel-verification.md) records the extension evidence. These checks do not claim full accessibility certification or broad browser compatibility.
 
 ## Spec Kit artifacts
 
@@ -89,12 +100,14 @@ Completed workflow: constitution → specify → clarify → plan → tasks → 
 
 Specify CLI 1.4.3.dev0, upstream commit f56d514a6bec2d1cbcd3e33dc4387ca6178b4678; Codex integration. A research helper reviewed future protocol boundaries during planning. Implementation and evidence are tracked in implementation-status.json.
 
-## After MVP confirmation
+## Protocol extensions
 
-Static routing defines this first feature. EVPN, MPLS-TE, STP and other protocols can be scoped next without another waiting period. The static forwarding adapter is separate from topology, traversal, session state and rendering. These protocols are not implemented yet: MPLS needs label/path state; Layer 2 flooding and storms need packet replication, convergence and bounded event processing. They can extend the simulation while retaining the network map, explanation shell and successful-ping objective.
+Static routing defines the first feature. The owner accepted the MPLS-TE explicit-path lab as the next addition; it now demonstrates the extension boundary. EVPN, STP, fuller MPLS behavior and other protocols can be scoped next. The static forwarding adapter is separate from topology, traversal, session state and rendering. The tunnel lab models explicit path steering; complete MPLS label processing remains future work. Layer 2 flooding and storms need packet replication, convergence and bounded event processing. They can extend the simulation while retaining the network map, explanation shell and successful-ping objective.
 
 ## Credits and license
 
 Created for Anthony House / [housepbass](https://github.com/housepbass). Workshop by John Capobianco, Joksan Flores, and Elliot Conner. Adapted from [NAF AC6](https://github.com/automateyournetwork/NAF_AC6) and the [Networking Video Game Starter Kit](https://github.com/automateyournetwork/NetworkingVideoGameStarterKit), using [GitHub Spec Kit](https://github.com/github/spec-kit).
 
 [Apache 2.0](LICENSE). No third-party art or model assets.
+
+The bonus lab has its own [specification](specs/002-explicit-path-tunnel/spec.md), [plan](specs/002-explicit-path-tunnel/plan.md), and [completed tasks](specs/002-explicit-path-tunnel/tasks.md).

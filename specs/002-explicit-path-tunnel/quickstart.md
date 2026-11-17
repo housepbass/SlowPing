@@ -1,0 +1,3 @@
+# Validate
+Run `python3 start.py --no-browser`, open localhost8001. Choose MPLS-TE lab. Run static ping44ms. Add R2,R3,R4 in that order, Apply tunnel, enable it, ping134ms; inspect112ms request and22ms reply. Disable and ping44ms. Try R1→R3→R5; Apply reports missing strict hop and leaves applied path unchanged. Drag reorder and remove to experiment. Hint/solution/reset retain earned results; confirmed session restart clears all. Repeat by keyboard and375px/reduced motion.
+`node --test tests/*.test.js`; `node tools/browser-check.mjs` for campaign regression; `node tools/tunnel-browser-check.mjs` for extension.

@@ -1,0 +1,5 @@
+# UI and adapter contract
+Entry: #open-tunnel from intro/summary, header #tunnel-lab while playing; #leave-tunnel restores prior campaign view.
+Path palette contains draggable intermediate router cards. Between fixed endpoints, drop zones carry target insertion indexes. Existing intermediate cards can be dragged to reorder. Same operations: #add-router select, #add-hop button, per-hop move-left/move-right/remove buttons with accessible names. #apply-tunnel validates draft; #toggle-tunnel explicitly changes mode; #tunnel-ping evaluates applied configuration only.
+State operations return new records; invalid Apply returns readable error and preserves installed path/mode/result/best. Path edits preserve current applied result while visibly marking a pending draft. Apply and mode switches clear current result. Help/solution/reset/restart follow spec.
+Adapter validates path before evaluation; closure returns nextHop/reason for request strict hops, static decision for reply and egress. No enabled invalid-path fallback. Shared ping owns TTL/links/delays. UI exposes modeled limitations before interaction.

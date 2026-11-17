@@ -1,10 +1,12 @@
 # Slow Ping MVP verification
 
+Historical baseline report. The subsequently accepted MPLS-TE extension and current regression results are in [tunnel-verification.md](tunnel-verification.md).
+
 Date: 2026-11-17 (America/Phoenix). macOS arm64, Node26.0.0, Python3.14.6, Chrome157.0.8103.79. This is a local verification report; owner confirmation remains pending.
 
 ## Automated outcomes
 
-- Domain, content and session suite: **14 passed, 0 failed**. Command: `node --test tests/*.test.js`. [TAP evidence](domain-results.tap).
+- Domain, content and session suite: **14 passed, 0 failed**. Command: `node --test tests/*.test.js`. [Original MVP TAP evidence](mvp-domain-results.tap).
 - Browser acceptance: **18 passed, 0 failed**, no page runtime errors. [Machine-readable results](browser-results.json). Keyboard-only campaign uses Tab, Enter, and native select type-ahead; macOS headless Chrome did not respond to simulated dropdown arrow menus, so type-ahead was used.
 - Python launcher compiles and served index.html and modules over loopback8001. Preview remains running for owner review.
 - Each test suite was written before its implementation; initial executions failed due to absent modules. Final checks pass.

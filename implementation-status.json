@@ -1,5 +1,5 @@
 {
-  "feature": "001-maximize-ping-latency",
+  "feature": "002-explicit-path-tunnel",
   "constitution": "1.1.0",
   "workflow": {
     "constitution": "complete",
@@ -12,14 +12,18 @@
   },
   "complete": true,
   "mvp_implemented": true,
-  "owner_mvp_confirmed": false,
+  "owner_mvp_confirmed": true,
   "constitution_ratification": "pending owner",
   "tests": {
-    "domain_state_content": 14,
-    "browser_acceptance": 18,
+    "domain_state_content": 23,
+    "campaign_browser_acceptance": 18,
+    "tunnel_browser_acceptance": 16,
     "failed": 0
   },
-  "verification": "docs/verification.md",
+  "verification": "docs/tunnel-verification.md",
   "completed_on": "2026-11-17",
-  "next_feature": "Additional networking protocol chosen after owner confirms MVP"
+  "next_feature": "Owner review of explicit-path lab; choose subsequent protocol expansion",
+  "owner_mvp_confirmation_basis": "Owner reviewed MVP and accepted proceeding with explicit-path MPLS-TE feature.",
+  "tunnel_implemented": true,
+  "owner_tunnel_confirmed": false
 }
