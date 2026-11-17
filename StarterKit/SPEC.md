@@ -1,5 +1,7 @@
 # Slow Ping · First playable specification
 
+> Workshop input, superseded by [the generated MVP spec](../specs/001-maximize-ping-latency/spec.md). Static routing is the initial MVP; additional protocols may follow immediately after owner confirmation.
+
 ## The pitch
 
 The player is a network engineer who changes routes in a working network to make a ping from A to B as slow as possible while keeping it successful. The game shows the request and reply paths and the round-trip time after each ping.
@@ -42,7 +44,7 @@ The level briefing states the model and its limits. Each level includes a publis
 5. **Retry or advance:** allow route changes and retries until the target is reached; then enable the next level.
 6. **Reflect:** show levels completed and each level's final successful RTT.
 
-**Worked interaction:** A already pings B in 20 ms. The player changes one router's route so the request takes a longer path totaling 70 ms, while the reply still returns in 20 ms. The game reports a successful 90 ms round trip and highlights the added links. If the player instead points a route back toward a previously visited router, the packet expires at TTL 0; the game reports failure and awards no latency score.
+**Worked interaction:** A pings B in 14 ms (7 ms each way). Sending the request through R2 increases its path to 52 ms, while the unchanged reply takes 7 ms: a successful 59 ms RTT. A routing loop instead expires at TTL zero and earns no score.
 
 ## Required stories and acceptance criteria
 

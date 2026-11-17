@@ -1,0 +1,487 @@
+[
+  {
+    "id": "scenic-route",
+    "title": "Take the scenic route",
+    "subtitle": "Detour the request.",
+    "protocol": "static-ipv4",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Source A",
+        "kind": "endpoint",
+        "address": "192.0.2.1",
+        "x": 65,
+        "y": 255
+      },
+      {
+        "id": "R1",
+        "label": "Router 1",
+        "kind": "router",
+        "x": 210.0,
+        "y": 255
+      },
+      {
+        "id": "R2",
+        "label": "Router 2",
+        "kind": "router",
+        "x": 500.0,
+        "y": 105
+      },
+      {
+        "id": "R3",
+        "label": "Router 3",
+        "kind": "router",
+        "x": 790.0,
+        "y": 255
+      },
+      {
+        "id": "B",
+        "label": "Destination B",
+        "kind": "endpoint",
+        "address": "198.51.100.1",
+        "x": 935,
+        "y": 255
+      }
+    ],
+    "links": [
+      {
+        "a": "A",
+        "b": "R1",
+        "delayMs": 1
+      },
+      {
+        "a": "R3",
+        "b": "B",
+        "delayMs": 1
+      },
+      {
+        "a": "R1",
+        "b": "R3",
+        "delayMs": 5
+      },
+      {
+        "a": "R1",
+        "b": "R2",
+        "delayMs": 20
+      },
+      {
+        "a": "R2",
+        "b": "R3",
+        "delayMs": 30
+      }
+    ],
+    "routes": {
+      "R1": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R3"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "A"
+        }
+      ],
+      "R2": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R3"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ],
+      "R3": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "B"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ]
+    },
+    "edits": [
+      {
+        "router": "R1",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R3", "R2", null]
+      }
+    ],
+    "solution": [
+      {
+        "router": "R1",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R2"
+      }
+    ],
+    "baselineRtt": 14,
+    "targetRtt": 59,
+    "hints": [
+      "Follow the B route from R1. The upper links have larger delays than the 5 ms shortcut.",
+      "On R1, send 198.51.100.1/32 via R2. Apply, then ping. The request is 52 ms and the reply 7 ms."
+    ]
+  },
+  {
+    "id": "return-trip",
+    "title": "The way back",
+    "subtitle": "Detour the reply.",
+    "protocol": "static-ipv4",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Source A",
+        "kind": "endpoint",
+        "address": "192.0.2.1",
+        "x": 65,
+        "y": 255
+      },
+      {
+        "id": "R1",
+        "label": "Router 1",
+        "kind": "router",
+        "x": 210.0,
+        "y": 255
+      },
+      {
+        "id": "R2",
+        "label": "Router 2",
+        "kind": "router",
+        "x": 403.33333333333337,
+        "y": 105
+      },
+      {
+        "id": "R3",
+        "label": "Router 3",
+        "kind": "router",
+        "x": 596.6666666666667,
+        "y": 105
+      },
+      {
+        "id": "R4",
+        "label": "Router 4",
+        "kind": "router",
+        "x": 790.0,
+        "y": 255
+      },
+      {
+        "id": "B",
+        "label": "Destination B",
+        "kind": "endpoint",
+        "address": "198.51.100.1",
+        "x": 935,
+        "y": 255
+      }
+    ],
+    "links": [
+      {
+        "a": "A",
+        "b": "R1",
+        "delayMs": 2
+      },
+      {
+        "a": "R4",
+        "b": "B",
+        "delayMs": 2
+      },
+      {
+        "a": "R1",
+        "b": "R4",
+        "delayMs": 8
+      },
+      {
+        "a": "R1",
+        "b": "R2",
+        "delayMs": 15
+      },
+      {
+        "a": "R2",
+        "b": "R3",
+        "delayMs": 25
+      },
+      {
+        "a": "R3",
+        "b": "R4",
+        "delayMs": 20
+      }
+    ],
+    "routes": {
+      "R1": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R4"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "A"
+        }
+      ],
+      "R2": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R3"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ],
+      "R3": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R4"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R2"
+        }
+      ],
+      "R4": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "B"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ]
+    },
+    "edits": [
+      {
+        "router": "R4",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R1", "R3", null]
+      }
+    ],
+    "solution": [
+      {
+        "router": "R4",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R3"
+      }
+    ],
+    "baselineRtt": 24,
+    "targetRtt": 76,
+    "hints": [
+      "The echo reply has its own routes. Inspect the route to A on R4.",
+      "On R4, send 192.0.2.1/32 via R3. Apply and ping: request 12 ms plus reply 64 ms."
+    ]
+  },
+  {
+    "id": "slow-not-stuck",
+    "title": "Slow, not stuck",
+    "subtitle": "Stretch both legs. Keep the reply alive.",
+    "protocol": "static-ipv4",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Source A",
+        "kind": "endpoint",
+        "address": "192.0.2.1",
+        "x": 65,
+        "y": 255
+      },
+      {
+        "id": "R1",
+        "label": "Router 1",
+        "kind": "router",
+        "x": 210.0,
+        "y": 255
+      },
+      {
+        "id": "R2",
+        "label": "Router 2",
+        "kind": "router",
+        "x": 355.0,
+        "y": 105
+      },
+      {
+        "id": "R3",
+        "label": "Router 3",
+        "kind": "router",
+        "x": 500.0,
+        "y": 75
+      },
+      {
+        "id": "R4",
+        "label": "Router 4",
+        "kind": "router",
+        "x": 645.0,
+        "y": 105
+      },
+      {
+        "id": "R5",
+        "label": "Router 5",
+        "kind": "router",
+        "x": 790.0,
+        "y": 255
+      },
+      {
+        "id": "B",
+        "label": "Destination B",
+        "kind": "endpoint",
+        "address": "198.51.100.1",
+        "x": 935,
+        "y": 255
+      }
+    ],
+    "links": [
+      {
+        "a": "A",
+        "b": "R1",
+        "delayMs": 3
+      },
+      {
+        "a": "R5",
+        "b": "B",
+        "delayMs": 3
+      },
+      {
+        "a": "R1",
+        "b": "R5",
+        "delayMs": 16
+      },
+      {
+        "a": "R1",
+        "b": "R2",
+        "delayMs": 18
+      },
+      {
+        "a": "R2",
+        "b": "R3",
+        "delayMs": 24
+      },
+      {
+        "a": "R3",
+        "b": "R4",
+        "delayMs": 28
+      },
+      {
+        "a": "R4",
+        "b": "R5",
+        "delayMs": 36
+      },
+      {
+        "a": "R2",
+        "b": "R4",
+        "delayMs": 6
+      }
+    ],
+    "routes": {
+      "R1": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R5"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "A"
+        }
+      ],
+      "R2": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R3"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ],
+      "R3": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R4"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R2"
+        }
+      ],
+      "R4": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R5"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R3"
+        }
+      ],
+      "R5": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "B"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ]
+    },
+    "edits": [
+      {
+        "router": "R1",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R5", "R2", null]
+      },
+      {
+        "router": "R5",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R1", "R4", null]
+      },
+      {
+        "router": "R2",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R3", "R4", "R1", null]
+      },
+      {
+        "router": "R4",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R3", "R2", "R5", null]
+      }
+    ],
+    "solution": [
+      {
+        "router": "R1",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R2"
+      },
+      {
+        "router": "R5",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R4"
+      },
+      {
+        "router": "R2",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R3"
+      },
+      {
+        "router": "R4",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R3"
+      }
+    ],
+    "baselineRtt": 44,
+    "targetRtt": 224,
+    "hints": [
+      "A shortcut saves time, which is the opposite of your goal. Detour both legs through the full upper chain. Repeated routers will exhaust TTL.",
+      "Send B from R1 via R2 and from R2 via R3. Send A from R5 via R4 and from R4 via R3. Both legs take 112 ms."
+    ]
+  }
+]

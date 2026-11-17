@@ -1,5 +1,7 @@
 # Slow Ping · Project constitution
 
+> Workshop input. The generated [constitution](../.specify/memory/constitution.md) and [feature artifacts](../specs/001-maximize-ping-latency/) govern the implemented MVP. Static routing is the initial scope; further protocols may follow immediately after owner confirmation.
+
 **Purpose:** help networking learners understand how route selection affects end-to-end ping latency by changing routes in a working, visible network.
 
 **First release:** one core mechanic, three short levels, a browser, and a small workshop-sized build. Protocol expansion and topology authoring are later work.

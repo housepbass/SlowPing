@@ -1,0 +1,16 @@
+{
+  "name": "slow-ping",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1",
+    "prettier": "3.6.2"
+  }
+}

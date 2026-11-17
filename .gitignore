@@ -1,0 +1,9 @@
+# Codex and other agent folders may contain local session data or credentials.
+.agents/
+
+.DS_Store
+node_modules/
+*.log
+.env*
+__pycache__/
+*.pyc

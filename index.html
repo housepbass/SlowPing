@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101719" />
+    <meta
+      name="description"
+      content="Take the scenic route. A graphical routing puzzle about making ping slow, while keeping it working."
+    />
+    <title>Slow Ping — Take the scenic route</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23cff367'/%3E%3Cpath d='M9 20h22m-7-7 7 7-7 7' fill='none' stroke='%23101719' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to game</a>
+    <header class="masthead">
+      <a class="brand" href="./"
+        ><span class="brand-icon" aria-hidden="true">↝</span> slow<span
+          >ping</span
+        ><span class="edition">NETWORK LAB / 001</span></a
+      >
+      <div class="header-right">
+        <span class="system-light" aria-hidden="true"></span
+        ><span>LOCAL SIMULATION</span
+        ><button id="restart" class="text-button" type="button">
+          Restart session ↗
+        </button>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <p role="status">Loading your network…</p>
+    </main>
+    <footer class="site-footer">
+      <span>MAKE IT SLOW. KEEP IT WORKING.</span
+      ><span>A small experiment in taking the long way home.</span
+      ><a href="./README.md">Model &amp; documentation ↗</a>
+    </footer>
+    <div
+      id="announcer"
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <dialog id="restart-dialog" aria-labelledby="restart-title">
+      <form method="dialog">
+        <p class="eyebrow">FRESH START</p>
+        <h2 id="restart-title">Restart this session?</h2>
+        <p>Your routes, scores, and assistance will be cleared.</p>
+        <div class="button-row">
+          <button value="cancel" autofocus>Keep playing</button
+          ><button class="primary" value="confirm">Restart</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>
