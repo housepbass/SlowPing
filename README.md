@@ -2,112 +2,99 @@
 
 **Make the ping slow. Keep it working.**
 
-A playable browser routing puzzle. Every challenge starts with a working network. Use the graphical router inspector to take a longer route, then send a ping and inspect its request and reply. Only a successful round trip counts.
+A graphical static-routing puzzle. Each level begins with a functional network; change routes to maximize successful ping round-trip time. Inspect both directions, diagnose loops and missing routes, and learn how specific routes override broader ones.
 
-**Status:** Static-routing MVP accepted for expansion; simplified MPLS-TE explicit-path lab implemented and locally verified. Three campaign levels plus a directly accessible bonus lab. Owner review of the new lab is pending.
+**Status:** playable, verified static-only revision. The earlier MPLS-TE experiment has been retired from the game; its implementation remains in Git history.
 
-![Slow Ping network editor](docs/screenshots/level-1.png)
+![Expert static-routing network](docs/screenshots/level-3.png)
 
-## Play
+## Play locally
 
-Python 3.11+ and a desktop browser are enough; no install, API key, account or runtime internet required. From this repository's root:
+Python3.11+ and a desktop browser are enough. No package installation, account, API key, backend, AI model, or runtime internet access is required.
 
 ```sh
 python3 start.py
 ```
 
-Open [http://127.0.0.1:8001](http://127.0.0.1:8001). Stop with Ctrl+C. Use `--port 8002` if busy; `--no-browser` suppresses automatic browser opening. The launcher serves this project directory even when invoked from elsewhere.
-
-While this repo is nested in the workshop, run from the NAF_AC6 root:
+Open [http://127.0.0.1:8001](http://127.0.0.1:8001). Ctrl+C stops the server. Optional: `--port 8002` and `--no-browser`. The launcher serves this project directory even when invoked from elsewhere. From the NAF_AC6 workshop root:
 
 ```sh
 python3 WORKSHOP/LAB/Examples/SlowPing/start.py
 ```
 
-Use HTTP; opening index.html as a local file does not support module/data loading. Static hosting under a subpath is supported by relative URLs; no hosted demo has been published.
+Static hosting can serve the repository root directly. Use HTTP; opening index.html with file:// does not support module/data loading. No public hosted deployment has been recorded.
 
-## How to play
+## Difficulty progression
 
-1. Choose **Start here** and read the mission. Run a baseline ping.
-2. Select a router on the canvas or with the Router selector. Editable routers have a green dot.
-3. Choose a destination prefix and connected next hop, then **Apply routes**. Destination B is 198.51.100.1/32; source A is 192.0.2.1/32. The other prefix choice deliberately does not match either endpoint; Unconfigured disables the route.
-4. **Run ping**. The solid network carries a dashed request and dotted reply. Read both ordered traces and their delay totals; expand the decisions for longest-prefix reasoning and TTL.
-5. Reach the maximum target and move to the next challenge. A working but faster ping does not complete the challenge. Failed pings never improve the best RTT.
+| Level | Routers | Editable routes | Baseline RTT | Maximum RTT | Challenge |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Take the scenic route | 3 | 1 | 14ms | 59ms | One request detour, fixed return |
+| Crossed wires | 6 | 10 | 22ms | 228ms | Weighted mesh; coordinate every request/return next hop |
+| Hostile takeover | 8 | 16 | 22ms | 349ms | /32 overrides above /24 routes, restricted return choices, TTL budget |
 
-| Challenge | Baseline RTT | Maximum successful RTT | Lesson |
-| --- | --- | --- | --- |
-| Take the scenic route | 14 ms | 59 ms | Detour the request |
-| The way back | 24 ms | 76 ms | The reply takes its own route |
-| Slow, not stuck | 44 ms | 224 ms | Detour both legs; avoid loops |
+Level2's maximum uses a114ms request and114ms reply. Level3 needs different forward and return paths:183+166=349ms. An eight-router reply could produce363ms total with a larger TTL, but fails with this game's TTL8. Each leg may use at most seven forwarding routers.
 
-Hints and worked solutions are available without penalty. Help is recorded separately from completion; after applying a solution you still run ping to verify it. Reset restores initial routes while retaining earned results. Restart asks for confirmation and clears everything. Reload starts a new session; there is no persistence or backend.
+1. Read the level briefing and run a baseline ping.
+2. Select a router on the diagram or from the inspector's selector.
+3. Choose destination and next hop, then **Apply routes**. Unconfigured disables a route. The other-network prefix deliberately does not match the ping endpoints.
+4. **Run ping** to see request/reply paths, delay sums and route decisions. Only a successful ping can improve your best RTT.
+5. Reach the verified target to unlock Next. Hints and worked solutions remain available; assistance is shown separately.
 
-All core actions work with keyboard. Use Tab/Shift+Tab, Enter/Space on buttons, and native select navigation or type-ahead. **View network as text & model assumptions** provides the full text alternative. The page respects reduced motion; animation never changes scoring.
+The expert level's /32 host entries win over /24 network entries. Set the /32 entries to Unconfigured when you want their broader routes to take effect. The inspector explains each override and R3's permitted return choices.
 
-## MPLS-TE explicit-path lab
+Reset restores initial routes while retaining earned results. Confirmed session restart clears everything; cancel preserves it. Reload starts fresh. There is no timer or persistence.
 
-Choose **MPLS-TE lab** in the header, opening screen, or campaign summary. The same five-router network starts with static routing and a 44 ms ping. Build an ordered R1→R5 tunnel by dragging R2/R3/R4 into drop zones, or use the Add selector and per-hop move/remove buttons. Apply the path, enable the tunnel, then Run ping.
-
-The maximum path R1→R2→R3→R4→R5 takes 112 ms for the request; the reply keeps its 22 ms static path, yielding **134ms RTT**, +90ms vs static. The 6 ms cross-link shortens the journey. Disable the tunnel to compare 44 ms again. Draft edits never affect the applied path; invalid strict-hop sequences explain the broken link and preserve the installed tunnel. Best successful tunnel RTT and assistance survive resets/mode switches until reload or confirmed session restart.
-
-This is a **simplified pre-established unidirectional LSP model** for explicit steering. It does not implement RSVP-TE signaling, reservations, labels or push/swap/pop, control-plane convergence, or MPLS TTL propagation. It uses the shared IPv4 TTL 8 teaching rule. Unique routers are a challenge constraint. MPLS itself receives no latency bonus. [RFC3209§4.3](https://www.rfc-editor.org/rfc/rfc3209.html#section-4.3) supports the strict explicit-routing concept; the omitted protocol mechanisms are stated in the lab briefing.
-
-![Explicit path tunnel lab](docs/screenshots/tunnel-desktop.png)
+All core actions work using keyboard with visible focus. Use native select navigation/type-ahead, Tab, Enter and buttons. **View network as text & model assumptions** lists every link; results list both paths. Crossing lines do not join unless a router is drawn. Reduced motion suppresses path animation without changing the score.
 
 ## Model and sources
 
-This is a deterministic teaching model: logical routers, fixed endpoint gateways and direct-delivery routes, static IPv4 routes with longest-prefix selection, and fixed symmetric one-way link delays. RTT sums all links traversed by the request and reply. Router processing adds zero delay. There is no simulated loss, queueing, congestion, ARP, interface subnet negotiation, dynamic routing, or Layer 2 behavior.
+The model uses static IPv4 routes with longest-prefix selection, logical endpoint gateways, fixed symmetric integer link delays and zero processing delay. A successful ping needs an Echo Request from A to B and an independently routed Echo Reply from B to A. RTT is the sum of traversed link delays, independent of animation duration.
 
-Every request and reply starts with TTL 8. Each router decrements before forwarding; zero drops the packet. A loop is traced until TTL expires. TTL counts router forwarding steps in this model, not wall-clock milliseconds. ICMP error packets are not separately routed; the result directly explains a drop.
+Each packet starts at TTL8. A router decrements before forwarding and discards at zero; endpoints do not decrement. A loop is traced until expiry. Failures never earn latency scores. This model does not simulate ARP, interface subnet negotiation, packet loss, queueing, congestion, dynamic routing, Layer2 switching or live infrastructure.
 
-| Source | Supported rule |
+| Source | Rule |
 | --- | --- |
-| [RFC 1812 §5.2.4](https://www.rfc-editor.org/rfc/rfc1812.html#section-5.2.4) | IPv4 route lookup; model uses the longest-prefix subset |
-| [RFC 1812 §5.3.1](https://www.rfc-editor.org/rfc/rfc1812.html#section-5.3.1) | Router TTL decrement and discard |
-| [RFC 792, Echo or Echo Reply](https://www.rfc-editor.org/rfc/rfc792.html) | Echo request and returned reply |
+| [RFC1812§5.2.4](https://www.rfc-editor.org/rfc/rfc1812.html#section-5.2.4) | IPv4 route lookup; modeled longest-prefix subset |
+| [RFC1812§5.3.1](https://www.rfc-editor.org/rfc/rfc1812.html#section-5.3.1) | Router TTL decrement and discard |
+| [RFC792 Echo/Echo Reply](https://www.rfc-editor.org/rfc/rfc792.html) | Request/reply semantics |
 
-Fixed link delays, logical endpoint attachments and TTL 8 are explicit game assumptions. Real network behavior and measured ping times include factors this game omits.
+Fixed delay, logical gateways, selected TTL8, permitted edits and restricted next hops are explicit teaching assumptions. Real devices include behavior this game omits.
 
-## Build and verify
+## Verify and develop
 
-Runtime: native JavaScript modules, HTML, CSS and SVG; original code and graphical elements, no runtime packages or external fonts. Developer tests require Node20+:
+Runtime uses native JavaScript modules, HTML, CSS, SVG and local JSON. Node20+ is only for development checks:
 
 ```sh
 node --test tests/*.test.js
 ```
 
-Browser checks require Chrome and the pinned development-only Playwright dependency:
+Browser checks use the pinned development-only Playwright dependency and Chrome:
 
 ```sh
 npm ci
 python3 start.py --no-browser
-# In a second terminal:
+# In another terminal:
 node tools/browser-check.mjs
-node tools/tunnel-browser-check.mjs
 ```
 
-Set CHROME_PATH for another Chrome installation, BASE_URL for a different local server. Browser script defaults to macOS Chrome. See [verification evidence](docs/verification.md), [browser results](docs/browser-results.json), and [domain results](docs/domain-results.tap). Current results: 23 domain/state/content checks, 18 static campaign browser checks, 16 tunnel browser checks; all pass. [Tunnel verification](docs/tunnel-verification.md) records the extension evidence. These checks do not claim full accessibility certification or broad browser compatibility.
+CHROME_PATH overrides the macOS Chrome default; BASE_URL overrides the server URL. All20 domain/state/content checks and22 browser checks pass. Browser coverage includes a keyboard-only campaign, loop/TTL failure, /32 shadowing, asymmetric paths, reset/restart, reduced motion and375/760/1024/1440px layouts. This is not a full accessibility certification, screen-reader audit or cross-browser matrix.
 
-## Spec Kit artifacts
+[Current verification](docs/static-difficulty-verification.md) · [Domain TAP](docs/domain-results.tap) · [Browser JSON](docs/browser-results.json) · [Independent path proof](specs/003-static-difficulty/path-proof.json).
 
-Completed workflow: constitution → specify → clarify → plan → tasks → analyze → implement.
+`python3 tools/author-levels.py` independently derives graph maxima and reproduces authored JSON using Python graph search. The separate JS oracle enumerates each router's local table choices and TTL-bounded simple paths; neither oracle uses the production ping evaluator for its expected maximum.
 
-- [Constitution v1.1.0](.specify/memory/constitution.md)
-- [Feature specification](specs/001-maximize-ping-latency/spec.md)
-- [Implementation plan](specs/001-maximize-ping-latency/plan.md), [research](specs/001-maximize-ping-latency/research.md), [data model](specs/001-maximize-ping-latency/data-model.md)
-- [Tasks](specs/001-maximize-ping-latency/tasks.md) and [quickstart](specs/001-maximize-ping-latency/quickstart.md)
-- Original workshop inputs: StarterKit/CONSTITUTION.md, StarterKit/SPEC.md, StarterKit/PLAN.md.
+## Spec-driven build record
 
-Specify CLI 1.4.3.dev0, upstream commit f56d514a6bec2d1cbcd3e33dc4387ca6178b4678; Codex integration. A research helper reviewed future protocol boundaries during planning. Implementation and evidence are tracked in implementation-status.json.
+GitHub Spec Kit1.4.3.dev0, Codex integration. Workflow: constitution→specify→clarify→plan→tasks→analyze→implement. Working [constitution v1.1.0](.specify/memory/constitution.md); formal owner ratification remains pending.
 
-## Protocol extensions
+- Active [specification](specs/003-static-difficulty/spec.md), [plan](specs/003-static-difficulty/plan.md), [tasks](specs/003-static-difficulty/tasks.md), [research/proof](specs/003-static-difficulty/research.md).
+- Historical [MVP artifacts](specs/001-maximize-ping-latency/) and [retired TE experiment](specs/002-explicit-path-tunnel/).
+- Workshop inputs in StarterKit/. Actual implementation status in implementation-status.json.
 
-Static routing defines the first feature. The owner accepted the MPLS-TE explicit-path lab as the next addition; it now demonstrates the extension boundary. EVPN, STP, fuller MPLS behavior and other protocols can be scoped next. The static forwarding adapter is separate from topology, traversal, session state and rendering. The tunnel lab models explicit path steering; complete MPLS label processing remains future work. Layer 2 flooding and storms need packet replication, convergence and bounded event processing. They can extend the simulation while retaining the network map, explanation shell and successful-ping objective.
+After reviewing the first MVP, the owner accepted an explicit-path experiment, then redirected the game toward static-only difficulty. The active campaign implements that direction. A research helper reviewed protocol boundaries during earlier planning; all current gameplay uses static routing.
 
 ## Credits and license
 
-Created for Anthony House / [housepbass](https://github.com/housepbass). Workshop by John Capobianco, Joksan Flores, and Elliot Conner. Adapted from [NAF AC6](https://github.com/automateyournetwork/NAF_AC6) and the [Networking Video Game Starter Kit](https://github.com/automateyournetwork/NetworkingVideoGameStarterKit), using [GitHub Spec Kit](https://github.com/github/spec-kit).
+Created for Anthony House / [housepbass](https://github.com/housepbass). Workshop by John Capobianco, Joksan Flores, and Elliot Conner. Adapted from [NAF_AC6](https://github.com/automateyournetwork/NAF_AC6), the [Networking Video Game Starter Kit](https://github.com/automateyournetwork/NetworkingVideoGameStarterKit), and [GitHub Spec Kit](https://github.com/github/spec-kit).
 
-[Apache 2.0](LICENSE). No third-party art or model assets.
-
-The bonus lab has its own [specification](specs/002-explicit-path-tunnel/spec.md), [plan](specs/002-explicit-path-tunnel/plan.md), and [completed tasks](specs/002-explicit-path-tunnel/tasks.md).
+[Apache-2.0](LICENSE). Code-authored SVG/CSS visuals; no external art or image generation.

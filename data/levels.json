@@ -123,12 +123,17 @@
     "hints": [
       "Follow the B route from R1. The upper links have larger delays than the 5 ms shortcut.",
       "On R1, send 198.51.100.1/32 via R2. Apply, then ping. The request is 52 ms and the reply 7 ms."
-    ]
+    ],
+    "difficulty": "FOUNDATION",
+    "briefing": "Start with one editable route. Send the request over slower links while its reply keeps the working direct route. Run a baseline ping, inspect R1, then compare the two directions.",
+    "viewHeight": 400,
+    "expectedRequest": ["A", "R1", "R2", "R3", "B"],
+    "expectedReply": ["B", "R3", "R1", "A"]
   },
   {
-    "id": "return-trip",
-    "title": "The way back",
-    "subtitle": "Detour the reply.",
+    "id": "crossed-wires",
+    "title": "Crossed wires",
+    "subtitle": "Coordinate both directions across a weighted mesh.",
     "protocol": "static-ipv4",
     "nodes": [
       {
@@ -136,44 +141,58 @@
         "label": "Source A",
         "kind": "endpoint",
         "address": "192.0.2.1",
-        "x": 65,
-        "y": 255
+        "x": 55,
+        "y": 250
       },
       {
         "id": "R1",
         "label": "Router 1",
         "kind": "router",
-        "x": 210.0,
-        "y": 255
+        "x": 175,
+        "y": 250
       },
       {
         "id": "R2",
         "label": "Router 2",
         "kind": "router",
-        "x": 403.33333333333337,
-        "y": 105
+        "x": 365,
+        "y": 90
       },
       {
         "id": "R3",
         "label": "Router 3",
         "kind": "router",
-        "x": 596.6666666666667,
-        "y": 105
+        "x": 655,
+        "y": 90
       },
       {
         "id": "R4",
         "label": "Router 4",
         "kind": "router",
-        "x": 790.0,
-        "y": 255
+        "x": 365,
+        "y": 395
+      },
+      {
+        "id": "R5",
+        "label": "Router 5",
+        "kind": "router",
+        "x": 655,
+        "y": 395
+      },
+      {
+        "id": "R6",
+        "label": "Router 6",
+        "kind": "router",
+        "x": 825,
+        "y": 250
       },
       {
         "id": "B",
         "label": "Destination B",
         "kind": "endpoint",
         "address": "198.51.100.1",
-        "x": 935,
-        "y": 255
+        "x": 945,
+        "y": 250
       }
     ],
     "links": [
@@ -183,9 +202,30 @@
         "delayMs": 2
       },
       {
-        "a": "R4",
+        "a": "R6",
         "b": "B",
         "delayMs": 2
+      },
+      {
+        "a": "R1",
+        "b": "R6",
+        "delayMs": 7,
+        "labelY": 235
+      },
+      {
+        "a": "R1",
+        "b": "R2",
+        "delayMs": 20
+      },
+      {
+        "a": "R2",
+        "b": "R3",
+        "delayMs": 12
+      },
+      {
+        "a": "R3",
+        "b": "R6",
+        "delayMs": 25
       },
       {
         "a": "R1",
@@ -193,26 +233,38 @@
         "delayMs": 8
       },
       {
-        "a": "R1",
-        "b": "R2",
-        "delayMs": 15
+        "a": "R4",
+        "b": "R5",
+        "delayMs": 40
+      },
+      {
+        "a": "R5",
+        "b": "R6",
+        "delayMs": 18
       },
       {
         "a": "R2",
-        "b": "R3",
-        "delayMs": 25
+        "b": "R4",
+        "delayMs": 15
       },
       {
         "a": "R3",
-        "b": "R4",
-        "delayMs": 20
+        "b": "R5",
+        "delayMs": 10
+      },
+      {
+        "a": "R2",
+        "b": "R5",
+        "delayMs": 5,
+        "labelX": 565,
+        "labelY": 300
       }
     ],
     "routes": {
       "R1": [
         {
           "prefix": "198.51.100.1/32",
-          "nextHop": "R4"
+          "nextHop": "R6"
         },
         {
           "prefix": "192.0.2.1/32",
@@ -222,7 +274,7 @@
       "R2": [
         {
           "prefix": "198.51.100.1/32",
-          "nextHop": "R3"
+          "nextHop": "R5"
         },
         {
           "prefix": "192.0.2.1/32",
@@ -232,7 +284,7 @@
       "R3": [
         {
           "prefix": "198.51.100.1/32",
-          "nextHop": "R4"
+          "nextHop": "R6"
         },
         {
           "prefix": "192.0.2.1/32",
@@ -240,6 +292,26 @@
         }
       ],
       "R4": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R1"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1"
+        }
+      ],
+      "R5": [
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R6"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R2"
+        }
+      ],
+      "R6": [
         {
           "prefix": "198.51.100.1/32",
           "nextHop": "B"
@@ -252,31 +324,144 @@
     },
     "edits": [
       {
+        "router": "R1",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R6", "R2", "R4", null]
+      },
+      {
+        "router": "R2",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R5", "R1", "R3", "R4", null]
+      },
+      {
+        "router": "R2",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R1", "R3", "R4", "R5", null]
+      },
+      {
+        "router": "R3",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R6", "R2", "R5", null]
+      },
+      {
+        "router": "R3",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R2", "R6", "R5", null]
+      },
+      {
+        "router": "R4",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R1", "R5", "R2", null]
+      },
+      {
         "router": "R4",
         "index": 1,
         "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
-        "nextHops": ["R1", "R3", null]
+        "nextHops": ["R1", "R5", "R2", null]
+      },
+      {
+        "router": "R5",
+        "index": 0,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R6", "R4", "R3", "R2", null]
+      },
+      {
+        "router": "R5",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R2", "R4", "R6", "R3", null]
+      },
+      {
+        "router": "R6",
+        "index": 1,
+        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
+        "nextHops": ["R1", "R3", "R5", null]
       }
     ],
     "solution": [
       {
+        "router": "R1",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R2"
+      },
+      {
+        "router": "R2",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R4"
+      },
+      {
+        "router": "R2",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R1"
+      },
+      {
+        "router": "R3",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R6"
+      },
+      {
+        "router": "R3",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R5"
+      },
+      {
         "router": "R4",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R5"
+      },
+      {
+        "router": "R4",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R2"
+      },
+      {
+        "router": "R5",
+        "index": 0,
+        "prefix": "198.51.100.1/32",
+        "nextHop": "R3"
+      },
+      {
+        "router": "R5",
+        "index": 1,
+        "prefix": "192.0.2.1/32",
+        "nextHop": "R4"
+      },
+      {
+        "router": "R6",
         "index": 1,
         "prefix": "192.0.2.1/32",
         "nextHop": "R3"
       }
     ],
-    "baselineRtt": 24,
-    "targetRtt": 76,
+    "baselineRtt": 22,
+    "targetRtt": 228,
     "hints": [
-      "The echo reply has its own routes. Inspect the route to A on R4.",
-      "On R4, send 192.0.2.1/32 via R3. Apply and ping: request 12 ms plus reply 64 ms."
-    ]
+      "Work backward from the destination to avoid loops, then trace the reply separately. Compare whole-path sums: the 40 ms cross-network leg is valuable, while the 5 ms diagonal is a shortcut.",
+      "Request: R1 \u2192 R2 \u2192 R4 \u2192 R5 \u2192 R3 \u2192 R6 (114 ms). Reply: R6 \u2192 R3 \u2192 R5 \u2192 R4 \u2192 R2 \u2192 R1 (114 ms). Every visited router needs the right route in that direction."
+    ],
+    "difficulty": "ADVANCED",
+    "viewHeight": 530,
+    "expectedRequest": ["A", "R1", "R2", "R4", "R5", "R3", "R6", "B"],
+    "expectedReply": ["B", "R6", "R3", "R5", "R4", "R2", "R1", "A"],
+    "briefing": "Ten editable routes across a six-router mesh. Both ping directions can detour, and the slowest path is not the one with the largest first link. Trace the complete request and reply; a single wrong next hop can create a loop."
   },
   {
-    "id": "slow-not-stuck",
-    "title": "Slow, not stuck",
-    "subtitle": "Stretch both legs. Keep the reply alive.",
+    "id": "hostile-takeover",
+    "title": "Hostile takeover",
+    "subtitle": "Outsmart specific routes. Stay inside the hop budget.",
     "protocol": "static-ipv4",
     "nodes": [
       {
@@ -284,51 +469,72 @@
         "label": "Source A",
         "kind": "endpoint",
         "address": "192.0.2.1",
-        "x": 65,
-        "y": 255
+        "x": 55,
+        "y": 250
       },
       {
         "id": "R1",
         "label": "Router 1",
         "kind": "router",
-        "x": 210.0,
-        "y": 255
+        "x": 190,
+        "y": 250
       },
       {
         "id": "R2",
         "label": "Router 2",
         "kind": "router",
-        "x": 355.0,
-        "y": 105
+        "x": 320,
+        "y": 85
       },
       {
         "id": "R3",
         "label": "Router 3",
         "kind": "router",
-        "x": 500.0,
-        "y": 75
+        "x": 510,
+        "y": 85
       },
       {
         "id": "R4",
         "label": "Router 4",
         "kind": "router",
-        "x": 645.0,
-        "y": 105
+        "x": 710,
+        "y": 85
       },
       {
         "id": "R5",
         "label": "Router 5",
         "kind": "router",
-        "x": 790.0,
-        "y": 255
+        "x": 320,
+        "y": 405
+      },
+      {
+        "id": "R6",
+        "label": "Router 6",
+        "kind": "router",
+        "x": 510,
+        "y": 405
+      },
+      {
+        "id": "R7",
+        "label": "Router 7",
+        "kind": "router",
+        "x": 710,
+        "y": 405
+      },
+      {
+        "id": "R8",
+        "label": "Router 8",
+        "kind": "router",
+        "x": 810,
+        "y": 250
       },
       {
         "id": "B",
         "label": "Destination B",
         "kind": "endpoint",
         "address": "198.51.100.1",
-        "x": 935,
-        "y": 255
+        "x": 945,
+        "y": 250
       }
     ],
     "links": [
@@ -338,14 +544,16 @@
         "delayMs": 3
       },
       {
-        "a": "R5",
+        "a": "R8",
         "b": "B",
         "delayMs": 3
       },
       {
         "a": "R1",
-        "b": "R5",
-        "delayMs": 16
+        "b": "R8",
+        "delayMs": 5,
+        "labelX": 510,
+        "labelY": 245
       },
       {
         "a": "R1",
@@ -360,68 +568,166 @@
       {
         "a": "R3",
         "b": "R4",
-        "delayMs": 28
+        "delayMs": 42
       },
       {
         "a": "R4",
+        "b": "R8",
+        "delayMs": 15
+      },
+      {
+        "a": "R1",
         "b": "R5",
-        "delayMs": 36
+        "delayMs": 35
+      },
+      {
+        "a": "R5",
+        "b": "R6",
+        "delayMs": 12
+      },
+      {
+        "a": "R6",
+        "b": "R7",
+        "delayMs": 48
+      },
+      {
+        "a": "R7",
+        "b": "R8",
+        "delayMs": 28
       },
       {
         "a": "R2",
-        "b": "R4",
-        "delayMs": 6
+        "b": "R5",
+        "delayMs": 9,
+        "labelX": 305,
+        "labelY": 245
+      },
+      {
+        "a": "R3",
+        "b": "R6",
+        "delayMs": 33,
+        "labelX": 495,
+        "labelY": 320
+      },
+      {
+        "a": "R4",
+        "b": "R7",
+        "delayMs": 11,
+        "labelX": 725,
+        "labelY": 245
+      },
+      {
+        "a": "R2",
+        "b": "R6",
+        "delayMs": 17,
+        "labelX": 379,
+        "labelY": 185
+      },
+      {
+        "a": "R3",
+        "b": "R7",
+        "delayMs": 8,
+        "labelX": 572.5,
+        "labelY": 185
+      },
+      {
+        "a": "R6",
+        "b": "R8",
+        "delayMs": 6,
+        "labelX": 685,
+        "labelY": 345
       }
     ],
     "routes": {
       "R1": [
         {
-          "prefix": "198.51.100.1/32",
-          "nextHop": "R5"
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R8"
         },
         {
-          "prefix": "192.0.2.1/32",
+          "prefix": "192.0.2.0/24",
           "nextHop": "A"
+        },
+        {
+          "prefix": "198.51.100.1/32",
+          "nextHop": "R8",
+          "note": "Host-route override: this /32 beats the broader /24 above. Set it to Unconfigured to let the /24 choose the next hop."
         }
       ],
       "R2": [
         {
-          "prefix": "198.51.100.1/32",
-          "nextHop": "R3"
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R1"
         },
         {
-          "prefix": "192.0.2.1/32",
+          "prefix": "192.0.2.0/24",
           "nextHop": "R1"
         }
       ],
       "R3": [
         {
-          "prefix": "198.51.100.1/32",
-          "nextHop": "R4"
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R7"
         },
         {
-          "prefix": "192.0.2.1/32",
-          "nextHop": "R2"
+          "prefix": "192.0.2.0/24",
+          "nextHop": "R7",
+          "note": "Return-path restriction: R3 may send traffic toward A only via R7 or R4."
         }
       ],
       "R4": [
         {
-          "prefix": "198.51.100.1/32",
-          "nextHop": "R5"
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R8"
         },
         {
-          "prefix": "192.0.2.1/32",
-          "nextHop": "R3"
+          "prefix": "192.0.2.0/24",
+          "nextHop": "R8"
         }
       ],
       "R5": [
         {
-          "prefix": "198.51.100.1/32",
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R6"
+        },
+        {
+          "prefix": "192.0.2.0/24",
+          "nextHop": "R6"
+        }
+      ],
+      "R6": [
+        {
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R8"
+        },
+        {
+          "prefix": "192.0.2.0/24",
+          "nextHop": "R8"
+        }
+      ],
+      "R7": [
+        {
+          "prefix": "198.51.100.0/24",
+          "nextHop": "R4"
+        },
+        {
+          "prefix": "192.0.2.0/24",
+          "nextHop": "R4"
+        }
+      ],
+      "R8": [
+        {
+          "prefix": "198.51.100.0/24",
           "nextHop": "B"
         },
         {
-          "prefix": "192.0.2.1/32",
+          "prefix": "192.0.2.0/24",
           "nextHop": "R1"
+        },
+        {
+          "prefix": "192.0.2.1/32",
+          "nextHop": "R1",
+          "note": "Host-route override: this /32 beats the broader /24 above. Set it to Unconfigured to let the /24 choose the next hop."
         }
       ]
     },
@@ -429,59 +735,208 @@
       {
         "router": "R1",
         "index": 0,
-        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
-        "nextHops": ["R5", "R2", null]
-      },
-      {
-        "router": "R5",
-        "index": 1,
-        "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
-        "nextHops": ["R1", "R4", null]
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R8", "R2", "R5", null]
       },
       {
         "router": "R2",
         "index": 0,
-        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
-        "nextHops": ["R3", "R4", "R1", null]
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R1", "R3", "R5", "R6", null]
+      },
+      {
+        "router": "R2",
+        "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R1", "R3", "R5", "R6", null]
+      },
+      {
+        "router": "R3",
+        "index": 0,
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R7", "R2", "R4", "R6", null]
+      },
+      {
+        "router": "R3",
+        "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R7", "R4", null]
+      },
+      {
+        "router": "R4",
+        "index": 0,
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R8", "R3", "R7", null]
       },
       {
         "router": "R4",
         "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R8", "R3", "R7", null]
+      },
+      {
+        "router": "R5",
+        "index": 0,
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R6", "R1", "R2", null]
+      },
+      {
+        "router": "R5",
+        "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R6", "R1", "R2", null]
+      },
+      {
+        "router": "R6",
+        "index": 0,
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R8", "R5", "R7", "R3", "R2", null]
+      },
+      {
+        "router": "R6",
+        "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R8", "R5", "R7", "R3", "R2", null]
+      },
+      {
+        "router": "R7",
+        "index": 0,
+        "prefixes": ["198.51.100.0/24", "203.0.113.0/24"],
+        "nextHops": ["R4", "R6", "R8", "R3", null]
+      },
+      {
+        "router": "R7",
+        "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R4", "R6", "R8", "R3", null]
+      },
+      {
+        "router": "R8",
+        "index": 1,
+        "prefixes": ["192.0.2.0/24", "203.0.113.0/24"],
+        "nextHops": ["R1", "R4", "R7", "R6", null]
+      },
+      {
+        "router": "R1",
+        "index": 2,
+        "prefixes": ["198.51.100.1/32", "203.0.113.0/24"],
+        "nextHops": ["R8", null]
+      },
+      {
+        "router": "R8",
+        "index": 2,
         "prefixes": ["192.0.2.1/32", "203.0.113.0/24"],
-        "nextHops": ["R3", "R2", "R5", null]
+        "nextHops": ["R1", null]
       }
     ],
     "solution": [
       {
         "router": "R1",
         "index": 0,
-        "prefix": "198.51.100.1/32",
+        "prefix": "198.51.100.0/24",
+        "nextHop": "R5"
+      },
+      {
+        "router": "R2",
+        "index": 0,
+        "prefix": "198.51.100.0/24",
+        "nextHop": "R3"
+      },
+      {
+        "router": "R2",
+        "index": 1,
+        "prefix": "192.0.2.0/24",
+        "nextHop": "R1"
+      },
+      {
+        "router": "R3",
+        "index": 0,
+        "prefix": "198.51.100.0/24",
+        "nextHop": "R6"
+      },
+      {
+        "router": "R3",
+        "index": 1,
+        "prefix": "192.0.2.0/24",
+        "nextHop": "R7"
+      },
+      {
+        "router": "R4",
+        "index": 0,
+        "prefix": "198.51.100.0/24",
+        "nextHop": "R8"
+      },
+      {
+        "router": "R4",
+        "index": 1,
+        "prefix": "192.0.2.0/24",
+        "nextHop": "R3"
+      },
+      {
+        "router": "R5",
+        "index": 0,
+        "prefix": "198.51.100.0/24",
         "nextHop": "R2"
       },
       {
         "router": "R5",
         "index": 1,
-        "prefix": "192.0.2.1/32",
+        "prefix": "192.0.2.0/24",
+        "nextHop": "R1"
+      },
+      {
+        "router": "R6",
+        "index": 0,
+        "prefix": "198.51.100.0/24",
+        "nextHop": "R7"
+      },
+      {
+        "router": "R6",
+        "index": 1,
+        "prefix": "192.0.2.0/24",
+        "nextHop": "R5"
+      },
+      {
+        "router": "R7",
+        "index": 0,
+        "prefix": "198.51.100.0/24",
+        "nextHop": "R8"
+      },
+      {
+        "router": "R7",
+        "index": 1,
+        "prefix": "192.0.2.0/24",
+        "nextHop": "R6"
+      },
+      {
+        "router": "R8",
+        "index": 1,
+        "prefix": "192.0.2.0/24",
         "nextHop": "R4"
       },
       {
-        "router": "R2",
-        "index": 0,
+        "router": "R1",
+        "index": 2,
         "prefix": "198.51.100.1/32",
-        "nextHop": "R3"
+        "nextHop": null
       },
       {
-        "router": "R4",
-        "index": 1,
+        "router": "R8",
+        "index": 2,
         "prefix": "192.0.2.1/32",
-        "nextHop": "R3"
+        "nextHop": null
       }
     ],
-    "baselineRtt": 44,
-    "targetRtt": 224,
+    "baselineRtt": 22,
+    "targetRtt": 349,
     "hints": [
-      "A shortcut saves time, which is the opposite of your goal. Detour both legs through the full upper chain. Repeated routers will exhaust TTL.",
-      "Send B from R1 via R2 and from R2 via R3. Send A from R5 via R4 and from R4 via R3. Both legs take 112 ms."
-    ]
+      "First inspect the /32 overrides on R1 and R8: changing their /24 routes alone leaves ping on the short path. Then find high-delay simple paths using at most seven routers per leg. R3 has a restricted route toward A.",
+      "Disable the /32 overrides on R1 and R8. Request: R1 \u2192 R5 \u2192 R2 \u2192 R3 \u2192 R6 \u2192 R7 \u2192 R8 (183 ms). Reply: R8 \u2192 R4 \u2192 R3 \u2192 R7 \u2192 R6 \u2192 R5 \u2192 R1 (166 ms). Use Show solution to apply these coordinated routes, then ping."
+    ],
+    "difficulty": "EXPERT",
+    "viewHeight": 530,
+    "expectedRequest": ["A", "R1", "R5", "R2", "R3", "R6", "R7", "R8", "B"],
+    "expectedReply": ["B", "R8", "R4", "R3", "R7", "R6", "R5", "R1", "A"],
+    "briefing": "Eight routers, but TTL 8 allows at most seven forwarding routers per leg. A /32 host route beats a /24 network route: disable the two host overrides to expose your detours. R3 has different permitted return choices. Optimize the request and reply independently."
   }
 ]

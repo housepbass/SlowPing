@@ -1,5 +1,7 @@
 # Slow Ping · Implementation plan input
 
+> Original workshop input; the active campaign is specified in [003 static difficulty](../specs/003-static-difficulty/spec.md). Earlier level counts/topologies/targets and optional protocol ideas below are historical.
+
 > Workshop input. The generated [constitution](../.specify/memory/constitution.md) and [feature artifacts](../specs/001-maximize-ping-latency/) govern the implemented MVP. Static routing is the initial scope; further protocols may follow immediately after owner confirmation.
 
 > Workshop input document. Confirm it against the clarified specification before implementation.

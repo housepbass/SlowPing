@@ -1,5 +1,5 @@
 {
-  "feature": "002-explicit-path-tunnel",
+  "feature": "003-static-difficulty",
   "constitution": "1.1.0",
   "workflow": {
     "constitution": "complete",
@@ -15,15 +15,16 @@
   "owner_mvp_confirmed": true,
   "constitution_ratification": "pending owner",
   "tests": {
-    "domain_state_content": 23,
-    "campaign_browser_acceptance": 18,
-    "tunnel_browser_acceptance": 16,
+    "domain_state_content": 20,
+    "campaign_browser_acceptance": 22,
     "failed": 0
   },
-  "verification": "docs/tunnel-verification.md",
+  "verification": "docs/static-difficulty-verification.md",
   "completed_on": "2026-11-17",
-  "next_feature": "Owner review of explicit-path lab; choose subsequent protocol expansion",
+  "next_feature": "Owner review of the harder static-only campaign",
   "owner_mvp_confirmation_basis": "Owner reviewed MVP and accepted proceeding with explicit-path MPLS-TE feature.",
-  "tunnel_implemented": true,
-  "owner_tunnel_confirmed": false
+  "tunnel_implemented": false,
+  "owner_tunnel_confirmed": false,
+  "te_experiment": "retired from runtime; preserved in Git history",
+  "owner_revision_confirmed": false
 }

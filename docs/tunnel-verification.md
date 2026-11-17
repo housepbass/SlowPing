@@ -1,5 +1,7 @@
 # Explicit-path lab verification
 
+> Historical report. Current game and evidence: [static-difficulty-verification.md](static-difficulty-verification.md). Tunnel tooling described here was retired.
+
 Date: 2026-11-17, macOS arm64, Node 26, Chrome 157.0.8103.79. Owner accepted expanding the reviewed static MVP with this feature. Owner review of the new lab remains pending.
 
 ## Results

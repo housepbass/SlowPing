@@ -1,5 +1,7 @@
 # Slow Ping MVP verification
 
+> Historical report. Current game and evidence: [static-difficulty-verification.md](static-difficulty-verification.md). Tunnel tooling described here was retired.
+
 Historical baseline report. The subsequently accepted MPLS-TE extension and current regression results are in [tunnel-verification.md](tunnel-verification.md).
 
 Date: 2026-11-17 (America/Phoenix). macOS arm64, Node26.0.0, Python3.14.6, Chrome157.0.8103.79. This is a local verification report; owner confirmation remains pending.

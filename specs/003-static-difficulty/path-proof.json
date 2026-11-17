@@ -1,0 +1,113 @@
+[
+  {
+    "id": "crossed-wires",
+    "routers": 6,
+    "editableRoutes": 10,
+    "baseline": 22,
+    "target": 228,
+    "request": [
+      114,
+      [
+        "R1",
+        "R2",
+        "R4",
+        "R5",
+        "R3",
+        "R6"
+      ]
+    ],
+    "reply": [
+      114,
+      [
+        "R6",
+        "R3",
+        "R5",
+        "R4",
+        "R2",
+        "R1"
+      ]
+    ],
+    "validRequestPaths": 14,
+    "validReplyPaths": 14,
+    "unboundedRequest": [
+      114,
+      [
+        "R1",
+        "R2",
+        "R4",
+        "R5",
+        "R3",
+        "R6"
+      ]
+    ],
+    "unboundedReply": [
+      114,
+      [
+        "R6",
+        "R3",
+        "R5",
+        "R4",
+        "R2",
+        "R1"
+      ]
+    ]
+  },
+  {
+    "id": "hostile-takeover",
+    "routers": 8,
+    "editableRoutes": 16,
+    "baseline": 22,
+    "target": 349,
+    "request": [
+      183,
+      [
+        "R1",
+        "R5",
+        "R2",
+        "R3",
+        "R6",
+        "R7",
+        "R8"
+      ]
+    ],
+    "reply": [
+      166,
+      [
+        "R8",
+        "R4",
+        "R3",
+        "R7",
+        "R6",
+        "R5",
+        "R1"
+      ]
+    ],
+    "validRequestPaths": 45,
+    "validReplyPaths": 15,
+    "unboundedRequest": [
+      183,
+      [
+        "R1",
+        "R5",
+        "R2",
+        "R3",
+        "R6",
+        "R7",
+        "R8"
+      ]
+    ],
+    "unboundedReply": [
+      180,
+      [
+        "R8",
+        "R4",
+        "R3",
+        "R7",
+        "R6",
+        "R2",
+        "R5",
+        "R1"
+      ]
+    ]
+  }
+]

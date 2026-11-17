@@ -164,9 +164,17 @@ export function validateLevels(levels) {
       !ids.has(l.id), "Duplicate or missing level ID");
     ids.add(l.id);
     require(l.protocol === "static-ipv4", "Unsupported protocol");
+    require(typeof l.briefing === "string" &&
+      l.briefing.length > 0 &&
+      ["FOUNDATION", "ADVANCED", "EXPERT"].includes(
+        l.difficulty,
+      ), "Missing level briefing/difficulty");
     require(Array.isArray(l.nodes) &&
       l.nodes.length >= 3 &&
       l.nodes.length <= 10, "Invalid device count");
+    require(Number.isInteger(l.viewHeight) &&
+      l.viewHeight >= 400 &&
+      l.viewHeight <= 650, "Invalid diagram height");
     const nodes = new Set();
     let endpoints = 0;
     for (const n of l.nodes) {
@@ -198,6 +206,13 @@ export function validateLevels(levels) {
         !links.has(key) &&
         Number.isInteger(e.delayMs) &&
         e.delayMs > 0, "Invalid link");
+      require(["labelX", "labelY"].every(
+        (k) =>
+          e[k] === undefined ||
+          (Number.isFinite(e[k]) &&
+            e[k] >= 0 &&
+            e[k] <= (k === "labelX" ? 1000 : l.viewHeight)),
+      ), "Invalid diagram label position");
       links.add(key);
     }
     require(adjacent(l, "A").length === 1 &&

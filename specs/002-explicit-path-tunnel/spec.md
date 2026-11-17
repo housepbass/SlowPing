@@ -1,5 +1,7 @@
 # Feature Specification: MPLS-TE explicit-path lab
 
+> Historical feature. Superseded for active gameplay by [003 static difficulty](../003-static-difficulty/spec.md). The TE experiment is retired.
+
 **Created**: 2026-11-17 | **Status**: Ready for implementation | **Branch**: main
 **Input**: Owner accepted adding a simplified MPLS-TE explicit-path challenge after reviewing the static-routing MVP.
 

@@ -1,5 +1,7 @@
 # Feature Specification: Slow Ping MVP
 
+> Historical feature. Superseded for active gameplay by [003 static difficulty](../003-static-difficulty/spec.md). The TE experiment is retired.
+
 **Feature Branch**: `main` (feature discovery uses `.specify/feature.json`)
 **Created**: 2026-11-17
 **Status**: Ready for implementation

@@ -2,7 +2,10 @@
 // Override CHROME_PATH or BASE_URL when needed. Default Chrome path is for macOS.
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
+const levels = JSON.parse(
+  await readFile(new URL("../data/levels.json", import.meta.url), "utf8"),
+);
 const base = process.env.BASE_URL || "http://127.0.0.1:8001";
 const browser = await chromium.launch({
   headless: true,
@@ -65,9 +68,37 @@ async function ping(expected) {
     );
   else assert.match(await page.locator("#result-title").innerText(), expected);
 }
+async function configure(index, filter = () => true) {
+  const changes = levels[index].solution.filter(filter);
+  for (const router of [...new Set(changes.map((c) => c.router))]) {
+    await select("#router-select", router);
+    for (const c of changes.filter((c) => c.router === router)) {
+      await select(`#prefix-${c.index}`, c.prefix);
+      await select(`#hop-${c.index}`, c.nextHop || "");
+    }
+    await press("#apply");
+  }
+}
+async function checkWidths() {
+  for (const width of [1440, 1024, 760, 375]) {
+    await page.setViewportSize({ width, height: 1000 });
+    assert.ok(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+      `Horizontal overflow at${width}`,
+    );
+  }
+  await page.setViewportSize({ width: 1440, height: 1080 });
+}
 try {
   await page.goto(base);
   await page.locator("#start").waitFor();
+  assert.equal(
+    await page.getByRole("button", { name: /MPLS|tunnel/i }).count(),
+    0,
+  );
+  passed("Static-only game has no TE entry points");
   await page.screenshot({
     path: "docs/screenshots/introduction.png",
     fullPage: true,
@@ -102,33 +133,91 @@ try {
   await ping(14);
   passed("Reset restores baseline");
   await press("#next");
-  await ping(24);
-  await edit("R4", 1, "R3");
-  await ping(76);
-  passed("Reply detour independent from request");
-  await press("#next");
-  await ping(44);
+  await ping(22);
+  assert.match(await page.locator(".level-brief").innerText(), /10 EDITABLE/);
   await edit("R1", 0, "R2");
   await edit("R2", 0, "R1");
   await ping(/circles/);
   assert.match(await page.locator(".failure").innerText(), /TTL expired/);
-  passed("Routing loop expires without score");
   await press("#reset");
-  await press("#hint");
-  assert.match(await page.locator(".hint-box").innerText(), /shortcut/);
-  assert.ok(await page.locator("#next").isDisabled());
-  await edit("R1", 0, "R2");
-  await edit("R5", 1, "R4");
-  await ping(224);
-  passed("Combined detours attain independent maximum");
+  await ping(22);
+  passed("Six-router mesh loop and reset preserve working baseline");
+  await configure(1);
+  await ping(228);
+  passed("Six-router coordinated request and return reach228ms");
+  await checkWidths();
   await page.screenshot({
-    path: "docs/screenshots/level-3.png",
+    path: "docs/screenshots/level-2.png",
     fullPage: true,
   });
   await press("#next");
+  await ping(22);
+  assert.match(
+    await page.locator(".level-brief").innerText(),
+    /seven forwarding routers/,
+  );
+  await configure(2, (c) => c.index !== 2);
+  await ping(22);
+  assert.match(
+    await page.locator(".route-note").last().innerText(),
+    /\/32 beats/,
+  );
+  passed("Eight-router /32 overrides mask all broader detours");
+  await configure(2);
+  await ping(349);
+  assert.match(
+    await page.locator(".path-text").first().innerText(),
+    /A → R1 → R5 → R2 → R3 → R6 → R7 → R8 → B/,
+  );
+  assert.match(
+    await page.locator(".path-text").nth(1).innerText(),
+    /B → R8 → R4 → R3 → R7 → R6 → R5 → R1 → A/,
+  );
+  passed("Expert optimum has independent asymmetric paths and349ms RTT");
+  await select("#router-select", "R3");
+  assert.deepEqual(
+    await page
+      .locator("#hop-1 option")
+      .evaluateAll((opts) => opts.map((o) => o.value)),
+    ["R7", "R4", ""],
+  );
+  passed("Expert permitted return choices are visible and enforced");
+  await edit("R6", 1, "R2");
+  await edit("R2", 1, "R5");
+  await edit("R5", 1, "R1");
+  await ping(/circles/);
+  assert.match(await page.locator(".failure").innerText(), /TTL expired at R1/);
+  assert.match(await page.locator(".baseline").nth(1).innerText(), /349 ms/);
+  passed("Eight-router return exceeds TTL8 and does not improve best");
+  await press("#reset");
+  await ping(22);
+  await configure(2);
+  await ping(349);
+  await checkWidths();
+  await page.setViewportSize({ width: 375, height: 1000 });
+  await page.locator(".network-canvas").scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: "docs/screenshots/level-3-narrow.png",
+    fullPage: false,
+  });
+  await page.setViewportSize({ width: 1440, height: 1080 });
+  await page.setViewportSize({ width: 1440, height: 2100 });
+  await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        scrollTo(0, 0);
+        requestAnimationFrame(() => requestAnimationFrame(resolve));
+      }),
+  );
+  await page.screenshot({
+    path: "docs/screenshots/level-3.png",
+    fullPage: false,
+  });
+  await page.setViewportSize({ width: 1440, height: 1080 });
+  await press("#next");
   assert.match(
     await page.locator(".summary").innerText(),
-    /59[\s\S]*76[\s\S]*224/,
+    /59[\s\S]*228[\s\S]*349/,
   );
   passed("Keyboard-only campaign to summary");
   await press("#play-again");

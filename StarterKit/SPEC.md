@@ -1,5 +1,7 @@
 # Slow Ping · First playable specification
 
+> Original workshop input; the active campaign is specified in [003 static difficulty](../specs/003-static-difficulty/spec.md). Earlier level counts/topologies/targets and optional protocol ideas below are historical.
+
 > Workshop input, superseded by [the generated MVP spec](../specs/001-maximize-ping-latency/spec.md). Static routing is the initial MVP; additional protocols may follow immediately after owner confirmation.
 
 ## The pitch

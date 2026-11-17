@@ -1,7 +1,11 @@
 {
-  "date": "2026-11-17T19:15:39.461Z",
+  "date": "2026-11-17T19:28:14.430Z",
   "browser": "157.0.8103.79",
   "checks": [
+    {
+      "name": "Static-only game has no TE entry points",
+      "passed": true
+    },
     {
       "name": "Working baseline and next gating",
       "passed": true
@@ -23,15 +27,27 @@
       "passed": true
     },
     {
-      "name": "Reply detour independent from request",
+      "name": "Six-router mesh loop and reset preserve working baseline",
       "passed": true
     },
     {
-      "name": "Routing loop expires without score",
+      "name": "Six-router coordinated request and return reach228ms",
       "passed": true
     },
     {
-      "name": "Combined detours attain independent maximum",
+      "name": "Eight-router /32 overrides mask all broader detours",
+      "passed": true
+    },
+    {
+      "name": "Expert optimum has independent asymmetric paths and349ms RTT",
+      "passed": true
+    },
+    {
+      "name": "Expert permitted return choices are visible and enforced",
+      "passed": true
+    },
+    {
+      "name": "Eight-router return exceeds TTL8 and does not improve best",
       "passed": true
     },
     {
@@ -76,18 +92,23 @@
     }
   ],
   "pingFeedbackMs": [
+    9,
+    4,
+    5,
+    5,
+    4,
+    5,
+    6,
+    5,
+    6,
+    5,
+    6,
+    5,
+    5,
     7,
-    5,
-    6,
-    6,
     4,
-    5,
-    5,
-    5,
-    5,
-    5,
     4,
-    5
+    4
   ],
   "errors": []
 }

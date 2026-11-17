@@ -61,7 +61,7 @@ test("three levels, summary, cancelled and confirmed restart", () => {
   assert.equal(s.view, "summary");
   assert.deepEqual(
     s.records.map((r) => r.bestRtt),
-    [59, 76, 224],
+    [59, 228, 349],
   );
   assert.equal(restart(s, false), s);
   const clean = restart(s, true);

@@ -2,147 +2,129 @@ TAP version 13
 # Subtest: IPv4 prefix selection and invalid masks
 ok 1 - IPv4 prefix selection and invalid masks
   ---
-  duration_ms: 1.451709
+  duration_ms: 2.206125
   type: 'test'
   ...
 # Subtest: all content, baselines and independently calculated solutions
 ok 2 - all content, baselines and independently calculated solutions
   ---
-  duration_ms: 2.4825
+  duration_ms: 2.649833
   type: 'test'
   ...
 # Subtest: request-only detour uses independent direct reply
 ok 3 - request-only detour uses independent direct reply
   ---
-  duration_ms: 1.116625
+  duration_ms: 1.164208
   type: 'test'
   ...
 # Subtest: missing request and missing reply do not become successful scores
 ok 4 - missing request and missing reply do not become successful scores
   ---
-  duration_ms: 0.195916
+  duration_ms: 0.179875
   type: 'test'
   ...
 # Subtest: loop runs until TTL expires rather than failing immediately on revisit
 ok 5 - loop runs until TTL expires rather than failing immediately on revisit
   ---
-  duration_ms: 0.168541
+  duration_ms: 0.169042
   type: 'test'
   ...
 # Subtest: TTL boundary: TTL1 cannot leave first router; TTL2 allows one router
 ok 6 - TTL boundary: TTL1 cannot leave first router; TTL2 allows one router
   ---
-  duration_ms: 0.137792
+  duration_ms: 0.144709
   type: 'test'
   ...
 # Subtest: invalid next hop fails without scoring
 ok 7 - invalid next hop fails without scoring
   ---
-  duration_ms: 0.13775
+  duration_ms: 0.1095
   type: 'test'
   ...
 # Subtest: reject malformed levels and atomic edits
 ok 8 - reject malformed levels and atomic edits
   ---
-  duration_ms: 1.031208
+  duration_ms: 2.325458
   type: 'test'
   ...
-# Subtest: maxima independently follow path options and exhaustive configurations agree
-ok 9 - maxima independently follow path options and exhaustive configurations agree
+# Subtest: prefix-aware independent path oracle proves all maxima without configuration explosion
+ok 9 - prefix-aware independent path oracle proves all maxima without configuration explosion
   ---
-  duration_ms: 88.691625
+  duration_ms: 3.760667
+  type: 'test'
+  ...
+# Subtest: difficulty grows from3 to6 to8 routers and1 to10 to16 editable routes
+ok 10 - difficulty grows from3 to6 to8 routers and1 to10 to16 editable routes
+  ---
+  duration_ms: 0.607
+  type: 'test'
+  ...
+# Subtest: intermediate optimum coordinates both directions across the mesh
+ok 11 - intermediate optimum coordinates both directions across the mesh
+  ---
+  duration_ms: 0.315333
+  type: 'test'
+  ...
+# Subtest: expert optimum uses different forward and return paths, both within TTL8
+ok 12 - expert optimum uses different forward and return paths, both within TTL8
+  ---
+  duration_ms: 0.294167
+  type: 'test'
+  ...
+# Subtest: specific /32 routes mask broad /24 detours until explicitly disabled
+ok 13 - specific /32 routes mask broad /24 detours until explicitly disabled
+  ---
+  duration_ms: 0.387042
+  type: 'test'
+  ...
+# Subtest: eight-router scenic reply fails TTL8 although a slower unbounded route exists
+ok 14 - eight-router scenic reply fails TTL8 although a slower unbounded route exists
+  ---
+  duration_ms: 1.951458
+  type: 'test'
+  ...
+# Subtest: greedy largest first link cannot replace whole-path optimization
+ok 15 - greedy largest first link cannot replace whole-path optimization
+  ---
+  duration_ms: 0.160167
   type: 'test'
   ...
 # Subtest: introduction and unsolved next gating
-ok 10 - introduction and unsolved next gating
+ok 16 - introduction and unsolved next gating
   ---
-  duration_ms: 1.186541
+  duration_ms: 1.678041
   type: 'test'
   ...
 # Subtest: solution assistance applies but does not award completion before ping
-ok 11 - solution assistance applies but does not award completion before ping
+ok 17 - solution assistance applies but does not award completion before ping
   ---
-  duration_ms: 0.998875
+  duration_ms: 1.197042
   type: 'test'
   ...
 # Subtest: draft/apply staleness, immutable session, invalid changes atomic
-ok 12 - draft/apply staleness, immutable session, invalid changes atomic
+ok 18 - draft/apply staleness, immutable session, invalid changes atomic
   ---
-  duration_ms: 1.094125
+  duration_ms: 1.0975
   type: 'test'
   ...
 # Subtest: failure and repeated pings preserve completion/best; reset keeps earned results
-ok 13 - failure and repeated pings preserve completion/best; reset keeps earned results
+ok 19 - failure and repeated pings preserve completion/best; reset keeps earned results
   ---
-  duration_ms: 0.582375
+  duration_ms: 0.554708
   type: 'test'
   ...
 # Subtest: three levels, summary, cancelled and confirmed restart
-ok 14 - three levels, summary, cancelled and confirmed restart
+ok 20 - three levels, summary, cancelled and confirmed restart
   ---
-  duration_ms: 1.47975
+  duration_ms: 1.709875
   type: 'test'
   ...
-# Subtest: authored tunnel is valid and both direct modes equal44ms
-ok 15 - authored tunnel is valid and both direct modes equal44ms
-  ---
-  duration_ms: 3.040083
-  type: 'test'
-  ...
-# Subtest: tunnel overrides request only; egress delivers B; static routes remain intact
-ok 16 - tunnel overrides request only; egress delivers B; static routes remain intact
-  ---
-  duration_ms: 1.297959
-  type: 'test'
-  ...
-# Subtest: independent adjacency oracle enumerates all valid simple paths and maximum134
-ok 17 - independent adjacency oracle enumerates all valid simple paths and maximum134
-  ---
-  duration_ms: 0.413666
-  type: 'test'
-  ...
-# Subtest: reject invalid path shapes, duplicates, endpoints and nonadjacent segments
-ok 18 - reject invalid path shapes, duplicates, endpoints and nonadjacent segments
-  ---
-  duration_ms: 0.294834
-  type: 'test'
-  ...
-# Subtest: pending draft does not change ping; apply and mode switches clear stale traces
-ok 19 - pending draft does not change ping; apply and mode switches clear stale traces
-  ---
-  duration_ms: 0.233208
-  type: 'test'
-  ...
-# Subtest: invalid enabled state never falls back; TTL and failed reply never score
-ok 20 - invalid enabled state never falls back; TTL and failed reply never score
-  ---
-  duration_ms: 0.257
-  type: 'test'
-  ...
-# Subtest: help, solution, reset and disable preserve earned record but not traces
-ok 21 - help, solution, reset and disable preserve earned record but not traces
-  ---
-  duration_ms: 0.237791
-  type: 'test'
-  ...
-# Subtest: insertion, drag-style reorder, keyboard reorder and remove preserve fixed ends
-ok 22 - insertion, drag-style reorder, keyboard reorder and remove preserve fixed ends
-  ---
-  duration_ms: 0.209584
-  type: 'test'
-  ...
-# Subtest: reject bad authored target, topology, endpoints and solution
-ok 23 - reject bad authored target, topology, endpoints and solution
-  ---
-  duration_ms: 0.2845
-  type: 'test'
-  ...
-1..23
-# tests 23
+1..20
+# tests 20
 # suites 0
-# pass 23
+# pass 20
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 221.757333
+# duration_ms 146.622625
