@@ -125,6 +125,7 @@ main.addEventListener("click", (e) => {
   if (id === "retry") load();
 });
 async function load() {
+  document.querySelector("#restart").disabled = true;
   main.innerHTML = '<p role="status">Loading your network…</p>';
   try {
     const response = await fetch("./data/levels.json");
@@ -133,6 +134,7 @@ async function load() {
     const levels = validateLevels(await response.json());
     state = session.createSession(levels);
     render();
+    document.querySelector("#restart").disabled = false;
   } catch (error) {
     main.innerHTML = `<section class="error"><h1>Network unavailable.</h1><p>${escapeHTML(error.message)}</p><p>Start the local server and try again. No progress has been awarded.</p><button id="retry" class="primary">Retry loading</button></section>`;
   }
